@@ -1,0 +1,297 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+    "handler": "Microsoft.Azure.CreateUIDef",
+    "version": "0.1.2-preview",
+    "parameters": {
+        "basics": [
+            
+        ],
+        "steps": [
+			 {
+                "name": "azurehoundbasics",
+                "label": "AzureHound Basics",
+                "elements": [
+					{
+                "name": "region",
+                "type": "Microsoft.Common.DropDown",
+                "label": "Region",
+                "defaultValue": "cloud",
+                "toolTip": "Select the Azure region for deployment",
+                "constraints": {
+                    "allowedValues": [
+                        {
+                            "label": "China",
+                            "value": "china"
+                        },
+                        {
+                            "label": "Cloud",
+                            "value": "cloud"
+                        },
+                        {
+                            "label": "US Gov L4",
+                            "value": "usgov14"
+                        },
+                        {
+                            "label": "US Gov L5",
+                            "value": "usgov15"
+                        }
+                    ],
+                    "required": true
+                },
+                "visible": true
+            },
+            {
+                "name": "directory",
+                "type": "Microsoft.Common.TextBox",
+                "label": "Directory (Azure AD Tenant)",
+                "defaultValue": "",
+                "toolTip": "Enter the Azure AD Tenant GUID",
+                "constraints": {
+                    "required": true,
+                    "regex": "^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$",
+                    "validationMessage": "Please enter a valid GUID for the Azure AD Tenant"
+                },
+                "visible": true
+            }
+                   
+                ]
+            },
+            {
+                "name": "containerConfig",
+                "label": "Container Configuration",
+                "elements": [
+                    {
+                        "name": "containerGroupName",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Container Group Name",
+                        "defaultValue": "",
+                        "toolTip": "Name for the container group to be created",
+                        "constraints": {
+                            "required": true,
+                            "regex": "^[a-zA-Z0-9-]{3,63}$",
+                            "validationMessage": "Container group name must be 3-63 characters, containing only letters, numbers, and hyphens"
+                        }
+                    },
+                    {
+                        "name": "location",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Location",
+						"defaultValue": "[basics('location')]"
+                    }
+                ]
+            },
+            {
+                "name": "identityConfig",
+                "label": "Managed Identity Configuration",
+                "elements": [
+                    {
+                        "name": "deploymentUMIName",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Deployment Identity Name",
+                        "defaultValue": "",
+                        "toolTip": "Name of the existing deployment user managed identity",
+                        "constraints": {
+                            "required": true,
+                            "regex": "^[a-zA-Z0-9-]{3,128}$",
+                            "validationMessage": "Enter a valid managed identity name"
+                        }
+                    },
+                    {
+                        "name": "deploymentUMIResourceGroup",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Deployment Identity Resource Group",
+                        "defaultValue": "",
+                        "toolTip": "Resource group containing the deployment managed identity",
+                        "constraints": {
+                            "required": true,
+                            "regex": "^[a-zA-Z0-9-_()]{3,90}$",
+                            "validationMessage": "Enter a valid resource group name"
+                        }
+                    },
+                    {
+                        "name": "containerUMIName",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Container Identity Name",
+                        "defaultValue": "",
+                        "toolTip": "Name for the container user managed identity",
+                        "constraints": {
+                            "required": true,
+                            "regex": "^[a-zA-Z0-9-]{3,128}$",
+                            "validationMessage": "Enter a valid managed identity name"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "bloodhoundConfig",
+                "label": "Bloodhound Connection Setup",
+                "elements": [
+                    {
+                        "name": "bloodhoundUrl",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Bloodhound URL",
+                        "defaultValue": "",
+                        "toolTip": "Enter the Bloodhound URL",
+                        "constraints": {
+                            "required": true,
+                            "regex": "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$",
+                            "validationMessage": "Please enter a valid URL"
+                        }
+                    },
+                    {
+                        "name": "bloodhoundTokenId",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Bloodhound Token ID",
+                        "defaultValue": "",
+                        "toolTip": "Enter the Bloodhound Token ID",
+                        "constraints": {
+                            "required": true,
+                            "regex": "^[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$",
+                            "validationMessage": "Please enter a valid GUID for the Token ID"
+                        }
+                    },
+                    {
+                        "name": "bloodhoundToken",
+                        "type": "Microsoft.Common.PasswordBox",
+                        "label": {
+                            "password": "Bloodhound Token"
+                        },
+                        "toolTip": "Enter the Bloodhound Token",
+                        "constraints": {
+                            "required": true
+                        },
+                        "options": {
+                            "hideConfirmation": true,
+                            "hidePassword": true
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "proxyConfig",
+                "label": "Proxy Configuration",
+                "elements": [
+                    {
+                        "name": "proxyUrl",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Proxy URL",
+                        "defaultValue": "",
+                        "toolTip": "Enter the Proxy URL (optional)",
+                        "constraints": {
+                            "required": false,
+                            "regex": "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$",
+                            "validationMessage": "Please enter a valid URL"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "loggingConfig",
+                "label": "AzureHound Logging Configuration",
+                "elements": [
+                    {
+                        "name": "enableLogging",
+                        "type": "Microsoft.Common.OptionsGroup",
+                        "label": "Enable AzureHound Logging",
+                        "defaultValue": "No",
+                        "toolTip": "Enable or disable AzureHound logging",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "Yes",
+                                    "value": "Yes"
+                                },
+                                {
+                                    "label": "No",
+                                    "value": "No"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "loggingLevel",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Logging Level",
+                        "defaultValue": "disabled",
+                        "toolTip": "Select the logging level",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "Disabled",
+                                    "value": "disabled"
+                                },
+                                {
+                                    "label": "Debug",
+                                    "value": "debug"
+                                },
+                                {
+                                    "label": "Info",
+                                    "value": "info"
+                                },
+                                {
+                                    "label": "Warning",
+                                    "value": "warning"
+                                },
+                                {
+                                    "label": "Error",
+                                    "value": "error"
+                                }
+                            ]
+                        },
+                        "visible": "[equals(steps('loggingConfig').enableLogging, 'Yes')]"
+                    },
+                    {
+                        "name": "logfilePath",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Logfile Path",
+                        "defaultValue": "",
+                        "toolTip": "Enter the path for the log file",
+                        "constraints": {
+                            "required": "[equals(steps('loggingConfig').enableLogging, 'Yes')]",
+                            "regex": "^[a-zA-Z]:\\\\(?:[^\\\\/:*?\"<>|\\r\\n]+\\\\)*[^\\\\/:*?\"<>|\\r\\n]*$",
+                            "validationMessage": "Please enter a valid Windows file path"
+                        },
+                        "visible": "[equals(steps('loggingConfig').enableLogging, 'Yes')]"
+                    },
+                    {
+                        "name": "structuredLogs",
+                        "type": "Microsoft.Common.OptionsGroup",
+                        "label": "Enable Structured Logs",
+                        "defaultValue": "No",
+                        "toolTip": "Enable or disable structured logging",
+                        "constraints": {
+                            "allowedValues": [
+                                {
+                                    "label": "Yes",
+                                    "value": "Yes"
+                                },
+                                {
+                                    "label": "No",
+                                    "value": "No"
+                                }
+                            ]
+                        },
+                        "visible": "[equals(steps('loggingConfig').enableLogging, 'Yes')]"
+                    }
+                ]
+            }
+        ],
+        "outputs": {
+            "region": "[steps('azurehoundbasics').region]",
+            "directory": "[steps('azurehoundbasics').directory]",
+            "containerGroupName": "[steps('containerConfig').containerGroupName]",
+            "location": "[steps('containerConfig').location]",
+            "deploymentUMIName": "[steps('identityConfig').deploymentUMIName]",
+            "deploymentUMIResourceGroup": "[steps('identityConfig').deploymentUMIResourceGroup]",
+            "containerUMIName": "[steps('identityConfig').containerUMIName]",
+            "bloodhoundUrl": "[steps('bloodhoundConfig').bloodhoundUrl]",
+            "bloodhoundTokenId": "[steps('bloodhoundConfig').bloodhoundTokenId]",
+            "bloodhoundToken": "[steps('bloodhoundConfig').bloodhoundToken]",
+            "proxyUrl": "[steps('proxyConfig').proxyUrl]",
+            "enableLogging": "[steps('loggingConfig').enableLogging]",
+            "loggingLevel": "[steps('loggingConfig').loggingLevel]",
+            "logfilePath": "[steps('loggingConfig').logfilePath]",
+            "structuredLogs": "[steps('loggingConfig').structuredLogs]"
+        }
+    }
+}
