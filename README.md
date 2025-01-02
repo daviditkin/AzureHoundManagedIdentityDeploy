@@ -39,7 +39,11 @@ The ARM Template will create the Container Instance along with a User Managed Id
 The ARM Template is designed to create the Container Instance along with a User Managed Identity that will provide AzureHound with all the permissions it needs to run.  However, it
 
 - Create/Fix Managed Identity For The ARM Template
+   `create-deployment-umi-with-perms.ps1`
 - Create/Fix Managed Identity For the Container
+   `create-container-umi.ps1`
+- Full end to end script.
+   `single-script-full-deployment.ps1`
 
 
 ## Notes About Approach
