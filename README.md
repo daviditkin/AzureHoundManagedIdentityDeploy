@@ -41,9 +41,6 @@ The ARM Template is designed to create the Container Instance along with a User 
 - Create/Fix Managed Identity For The ARM Template
 - Create/Fix Managed Identity For the Container
 
-## Process Overview
-
-
 
 ## Notes About Approach
 ManagedIdentities can be assigned permissions just like App Registration (Enterprise Applications), however you are assigning the permissions to 
@@ -51,6 +48,5 @@ the managed identity's application object id.  After creation of a Managed Ident
 
 ## Permissions DeploymentScript requires
 The `managed-identity-permissions.sh` script will require 
-the following permissions to be assigned to a managed identity.  The following `az cli` script will assign the appropriate permissions to a managed identity that can be used for deployment.
-
+the following permissions to be assigned to a managed identity.  
 
